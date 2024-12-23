@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "Backjoon Logger",
+    "version": "1.0",
+    "action": {
+        "default_popup": "hello.html"
+    },
+    "permissions": [
+        "activeTab",
+        "storage",
+        "webRequest"
+    ],
+    "host_permissions": [
+        "https://www.acmicpc.net/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.acmicpc.net/*"
+            ],
+            "js": [
+                "content.js",
+                "result.js"
+            ]
+        }
+    ]
+}
