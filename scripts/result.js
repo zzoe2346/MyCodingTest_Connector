@@ -28,45 +28,43 @@ function waitForTableLoadAndGrading() {
 // 결과 읽기 함수
 async function readResults(resultTable) {
     try {
-        const resultRows = resultTable.querySelectorAll('tbody tr');
+        // 첫 번째 행만 선택
+        const firstRow = resultTable.querySelector('tbody tr');
 
-        if (resultRows.length > 0) {
+        if (firstRow) {
+            // 첫 번째 행의 각 셀 가져오기
+            const cells = firstRow.querySelectorAll('td');
+            const submissionId = cells[0].textContent;
+            const userId = cells[1].querySelector('a').href;
+            const problemId = cells[2].querySelector('a').href;
+            const resultText = cells[3].querySelector('.result-text').textContent;
+            const memory = cells[4].textContent;
+            const time = cells[5].textContent;
+            const language = cells[6].textContent;
+            const codeLength = cells[7].textContent;
+            const submittedAt = cells[8].querySelector('.show-date').getAttribute('data-original-title');
 
-            let results = [];
-            resultRows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const submissionId = cells[0].textContent;
-                const userId = cells[1].querySelector('a').href;
-                const problemId = cells[2].querySelector('a').href;
-                const resultText = cells[3].querySelector('.result-text').textContent;
-                const memory = cells[4].textContent;
-                const time = cells[5].textContent;
-                const language = cells[6].textContent;
-                const codeLength = cells[7].textContent;
-                const submittedAt = cells[8].querySelector('.show-date').getAttribute('data-original-title');
-
-                results.push({
-                    submissionId,
-                    userId,
-                    problemId,
-                    resultText,
-                    memory,
-                    time,
-                    language,
-                    codeLength,
-                    submittedAt
-                });
-            });
+            // 결과 객체 생성
+            const result = {
+                submissionId,
+                userId,
+                problemId,
+                resultText,
+                memory,
+                time,
+                language,
+                codeLength,
+                submittedAt
+            };
 
             // 저장된 코드 가져오기 (Chrome Storage 사용)
             chrome.storage.local.get('submittedCode', (data) => {
                 if (data.submittedCode) {
                     const code = data.submittedCode;
                     console.log("저장된 코드:", code);
-                    console.log("여기서의 결과");
-                    console.log(results);
+                    console.log("결과:", result);
                     // 코드와 결과 데이터를 서버로 전송
-                    sendCodeAndResultToServer(code, results);
+                    sendCodeAndResultToServer(code, [result]);
 
                     // (선택 사항) 전송 후 저장된 코드 삭제
                     chrome.storage.local.remove('submittedCode', () => {
@@ -77,8 +75,8 @@ async function readResults(resultTable) {
                 }
             })
 
-            console.log("결과");
-            console.log(results);
+            console.log("결과:");
+            console.log(result);
         } else {
             console.log("결과 테이블이 비어 있습니다.");
         }
@@ -86,6 +84,69 @@ async function readResults(resultTable) {
         console.error("결과를 읽는 중 오류가 발생했습니다:", error);
     }
 }
+
+
+// 결과 읽기 함수(old version)
+// async function readResults(resultTable) {
+//     try {
+//         const resultRows = resultTable.querySelectorAll('tbody tr');
+
+//         if (resultRows.length > 0) {
+
+//             let results = [];
+//             resultRows.forEach(row => {
+//                 const cells = row.querySelectorAll('td');
+//                 const submissionId = cells[0].textContent;
+//                 const userId = cells[1].querySelector('a').href;
+//                 const problemId = cells[2].querySelector('a').href;
+//                 const resultText = cells[3].querySelector('.result-text').textContent;
+//                 const memory = cells[4].textContent;
+//                 const time = cells[5].textContent;
+//                 const language = cells[6].textContent;
+//                 const codeLength = cells[7].textContent;
+//                 const submittedAt = cells[8].querySelector('.show-date').getAttribute('data-original-title');
+
+//                 results.push({
+//                     submissionId,
+//                     userId,
+//                     problemId,
+//                     resultText,
+//                     memory,
+//                     time,
+//                     language,
+//                     codeLength,
+//                     submittedAt
+//                 });
+//             });
+
+//             // 저장된 코드 가져오기 (Chrome Storage 사용)
+//             chrome.storage.local.get('submittedCode', (data) => {
+//                 if (data.submittedCode) {
+//                     const code = data.submittedCode;
+//                     console.log("저장된 코드:", code);
+//                     console.log("여기서의 결과");
+//                     console.log(results);
+//                     // 코드와 결과 데이터를 서버로 전송
+//                     sendCodeAndResultToServer(code, results);
+
+//                     // (선택 사항) 전송 후 저장된 코드 삭제
+//                     chrome.storage.local.remove('submittedCode', () => {
+//                         console.log('Code removed from storage');
+//                     });
+//                 } else {
+//                     console.log("저장된 코드가 없습니다.");
+//                 }
+//             })
+
+//             console.log("결과");
+//             console.log(results);
+//         } else {
+//             console.log("결과 테이블이 비어 있습니다.");
+//         }
+//     } catch (error) {
+//         console.error("결과를 읽는 중 오류가 발생했습니다:", error);
+//     }
+// }
 
 // 페이지 로드 시 URL 확인
 if (window.location.href.includes('status')) {
