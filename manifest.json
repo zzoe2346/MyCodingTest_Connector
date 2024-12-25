@@ -19,7 +19,7 @@
                 "https://www.acmicpc.net/*"
             ],
             "js": [
-                "content.js",
+                "submit.js",
                 "result.js"
             ]
         }

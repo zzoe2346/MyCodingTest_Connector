@@ -1,5 +1,3 @@
-// result.js
-
 // #status-table 로딩 완료 여부 확인 변수
 let tableLoaded = false;
 
@@ -15,8 +13,8 @@ function waitForTableLoadAndGrading() {
                 // 첫 번째 행의 결과 셀(4번째 td) 확인
                 const firstResultCell = resultTable.querySelector('tbody tr td:nth-child(4)');
 
-                // 결과 셀이 있고, 텍스트 내용이 숫자만 포함하고 있지 않으면 채점 완료
-                if (firstResultCell && !/^\d+$/.test(firstResultCell.textContent.trim())) {
+                // 결과 셀이 있고, 텍스트 내용이 "채점 중"만 포함하고 있지 않으면 채점 완료
+                if (firstResultCell && (!firstResultCell.textContent.includes('채점 중'))) {
                     clearInterval(checkInterval);
                     isGradingDone = true;
                     resolve(resultTable);
