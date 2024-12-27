@@ -3,7 +3,7 @@
     "name": "Backjoon Logger",
     "version": "1.0",
     "action": {
-        "default_popup": "hello.html"
+        "default_popup": "popup/hello.html"
     },
     "permissions": [
         "activeTab",
@@ -19,8 +19,8 @@
                 "https://www.acmicpc.net/*"
             ],
             "js": [
-                "submit.js",
-                "result.js"
+                "scripts/submit.js",
+                "scripts/result.js"
             ]
         }
     ]
