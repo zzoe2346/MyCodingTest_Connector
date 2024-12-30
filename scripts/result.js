@@ -35,8 +35,8 @@ async function readResults(resultTable) {
             // 첫 번째 행의 각 셀 가져오기
             const cells = firstRow.querySelectorAll('td');
             const submissionId = cells[0].textContent;
-            const baekjoonId = cells[1].querySelector('a').href;
-            const problemId = cells[2].querySelector('a').href;
+            const baekjoonId = cells[1].querySelector('a').href.split('/').pop();
+            const problemId = cells[2].querySelector('a').href.split('/').pop();
             const resultText = cells[3].querySelector('.result-text').textContent;
             const memory = cells[4].textContent;
             const time = cells[5].textContent;
