@@ -1,14 +1,12 @@
 {
     "manifest_version": 3,
-    "name": "Backjoon Logger",
-    "version": "1.0",
+    "name": "My Coding Test Connector",
+    "version": "1.0.1",
     "action": {
         "default_popup": "popup/hello.html"
     },
     "permissions": [
-        "activeTab",
-        "storage",
-        "webRequest"
+        "storage"
     ],
     "host_permissions": [
         "https://www.acmicpc.net/*"
@@ -16,12 +14,21 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.acmicpc.net/*"
+                "https://www.acmicpc.net/submit/*"
             ],
             "js": [
-                "scripts/submit.js",
-                "scripts/result.js"
-            ]
+                "scripts/at-submit.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://www.acmicpc.net/status*"
+            ],
+            "js": [
+                "scripts/at-result.js"
+            ],
+            "run_at": "document_end"
         }
     ]
 }

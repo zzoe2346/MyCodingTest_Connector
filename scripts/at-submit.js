@@ -1,15 +1,14 @@
-// 제출 버튼 클릭 이벤트 감지
 document.querySelector('#submit_button').addEventListener('click', () => {
-    // CodeMirror 텍스트 에디터에서 코드 가져오기
     const code = getCodeMirrorCode();
-
-    // 코드를 저장 (Chrome Storage 사용)
-    chrome.storage.local.set({ 'submittedCode': code }, () => {
-        console.log('Code saved to storage');
-    });
+    chrome.storage.local.set({submittedCode: code});
 });
 
-//제출할 코드 가져오기
+function getProblemNumber(){
+    const currentUrl = window.location.href;
+    const parts = currentUrl.split("/");
+    return parts[parts.length - 2];
+}
+
 function getCodeMirrorCode() {
     const codeLines = document.querySelectorAll('.CodeMirror-code .CodeMirror-line');
     let code = '';
